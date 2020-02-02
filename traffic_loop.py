@@ -20,17 +20,6 @@ GPIO.setup(gpio_walk, GPIO.OUT)
 def light_on(colour):
     print("  + Turning on " + colour)
     if colour == "green":
-        GPIO.output(gpio_green, GPIO.HIGH)
-    elif colour == "amber":
-        GPIO.output(gpio_amber, GPIO.HIGH)
-    elif colour == "red":
-        GPIO.output(gpio_red, GPIO.HIGH)
-    elif colour == "walk":
-        GPIO.output(gpio_walk, GPIO.HIGH)
-
-def light_off(colour):
-    print("  - Turning off " + colour)
-    if colour == "green":
         GPIO.output(gpio_green, GPIO.LOW)
     elif colour == "amber":
         GPIO.output(gpio_amber, GPIO.LOW)
@@ -39,17 +28,30 @@ def light_off(colour):
     elif colour == "walk":
         GPIO.output(gpio_walk, GPIO.LOW)
 
+def light_off(colour):
+    print("  - Turning off " + colour)
+    if colour == "green":
+        GPIO.output(gpio_green, GPIO.HIGH)
+    elif colour == "amber":
+        GPIO.output(gpio_amber, GPIO.HIGH)
+    elif colour == "red":
+        GPIO.output(gpio_red, GPIO.HIGH)
+    elif colour == "walk":
+        GPIO.output(gpio_walk, GPIO.HIGH)
+
 # light pattern loop
 if __name__ == '__main__':
     # initial state
     print("Starting traffic light loop")
-    light_on("green")
-    light_off("red")
     light_off("amber")
+    light_off("red")
+    light_on("green")
+    light_on("walk")
     # loop
-    while true:
+    while True:
         time.sleep(15)
         light_off("green")
+        light_off("walk")
         light_on("amber")
         time.sleep(15)
         light_off("amber")
@@ -60,3 +62,4 @@ if __name__ == '__main__':
         light_off("red")
         light_off("amber")
         light_on("green")
+        light_on("walk")
