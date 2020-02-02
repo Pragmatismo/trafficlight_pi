@@ -43,9 +43,9 @@ def light_off(colour):
 if __name__ == '__main__':
     # initial state
     print("Starting traffic light loop")
-    light_on(green)
-    light_off(red)
-    light_off(amber)
+    light_on("green")
+    light_off("red")
+    light_off("amber")
     # loop
     while true:
         time.sleep(15)
