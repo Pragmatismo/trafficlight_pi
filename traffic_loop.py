@@ -7,6 +7,8 @@ gpio_green = 7
 gpio_amber = 8
 gpio_red   = 25
 gpio_walk  = 24
+gpio_dontwalk = 28
+gpio_wait = 26
 
 # initial board setup
 GPIO.setmode(GPIO.BCM)
@@ -15,6 +17,8 @@ GPIO.setup(gpio_green, GPIO.OUT)
 GPIO.setup(gpio_amber, GPIO.OUT)
 GPIO.setup(gpio_red, GPIO.OUT)
 GPIO.setup(gpio_walk, GPIO.OUT)
+GPIO.setup(gpio_dontwalk, GPIO.OUT)
+GPIO.setup(gpio_wait, GPIO.OUT)
 
 # lamp control functions
 def light_on(colour):
@@ -27,6 +31,10 @@ def light_on(colour):
         GPIO.output(gpio_red, GPIO.LOW)
     elif colour == "walk":
         GPIO.output(gpio_walk, GPIO.LOW)
+    elif colour == "dontwalk":
+        GPIO.output(gpio_dontwalk, GPIO.LOW)
+    elif colour == "wait":
+        GPIO.output(gpio_wait, GPIO.LOW)
 
 def light_off(colour):
     print("  - Turning off " + colour)
@@ -38,6 +46,10 @@ def light_off(colour):
         GPIO.output(gpio_red, GPIO.HIGH)
     elif colour == "walk":
         GPIO.output(gpio_walk, GPIO.HIGH)
+    elif colour == "dontwalk":
+        GPIO.output(gpio_dontwalk, GPIO.HIGH)
+    elif colour == "wait":
+        GPIO.output(gpio_wait, GPIO.HIGH)
 
 # light pattern loop
 if __name__ == '__main__':
@@ -53,6 +65,8 @@ if __name__ == '__main__':
         light_off("green")
         light_off("walk")
         light_on("amber")
+        light_on("dontwalk")
+        light_on("wait")
         time.sleep(15)
         light_off("amber")
         light_on("red")
@@ -61,5 +75,7 @@ if __name__ == '__main__':
         time.sleep(15)
         light_off("red")
         light_off("amber")
+        light_off("dontwalk")
+        light_off("wait")
         light_on("green")
         light_on("walk")
