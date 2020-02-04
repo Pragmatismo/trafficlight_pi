@@ -7,8 +7,8 @@ gpio_green = 7
 gpio_amber = 8
 gpio_red   = 25
 gpio_walk  = 24
-gpio_dontwalk = 28
-gpio_wait = 26
+gpio_dontwalk = 23
+gpio_wait = 18
 
 # initial board setup
 GPIO.setmode(GPIO.BCM)
