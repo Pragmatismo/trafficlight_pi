@@ -57,6 +57,8 @@ if __name__ == '__main__':
     print("Starting traffic light loop")
     light_off("amber")
     light_off("red")
+    light_off("dontwalk")
+    light_off("wait")
     light_on("green")
     light_on("walk")
     # loop
