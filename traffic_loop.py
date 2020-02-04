@@ -61,6 +61,7 @@ if __name__ == '__main__':
     light_on("walk")
     # loop
     while True:
+        print("")
         time.sleep(15)
         light_off("green")
         light_off("walk")
