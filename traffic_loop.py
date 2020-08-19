@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import time
+import random
 import RPi.GPIO as GPIO
 
 # Pin Numbers
@@ -51,6 +52,16 @@ def light_off(colour):
     elif colour == "wait":
         GPIO.output(gpio_wait, GPIO.HIGH)
 
+def flicker_light(colour, duration, shortest_flicker, longest_flicker):
+    time_now = time.time()
+    while time.time() < time_now + duration:
+        flicker_time = random.uniform(shortest_flicker, longest_flicker)
+        light_on(colour)
+        time.sleep(flicker_time)
+        light_off(colour)
+        flicker_time = random.uniform(shortest_flicker, longest_flicker)
+        time.sleep(flicker_time)
+
 # light pattern loop
 if __name__ == '__main__':
     # initial state
@@ -65,15 +76,16 @@ if __name__ == '__main__':
     while True:
         print("")
         time.sleep(15)
-        light_off("green")
+        flicker_light("green", 15, 0.001, 1)
         light_off("walk")
         light_on("amber")
         light_on("dontwalk")
         light_on("wait")
         time.sleep(15)
         light_off("amber")
-        light_on("red")
+        flicker_light("red", 15, 0.01, 2)
         time.sleep(15)
+        flicker_light("red", 15, 0.1, 0.5)
         light_on("amber")
         time.sleep(15)
         light_off("red")
