@@ -12,7 +12,7 @@ gpio_walk  = 24
 gpio_dontwalk = 23
 gpio_wait = 18
 
-# initial board setup
+initial board setup
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(gpio_green, GPIO.OUT)
@@ -53,6 +53,13 @@ def light_off(colour):
     elif colour == "wait":
         GPIO.output(gpio_wait, GPIO.HIGH)
 
+# testing
+# def light_on(colour):
+#     print(" ON - " + colour)
+#
+# def light_off(colour):
+#     print(" OFF - " + colour)
+
 def flicker_light(colour, duration, shortest_flicker, longest_flicker):
     time_now = time.time()
     while time.time() < time_now + duration:
@@ -62,6 +69,25 @@ def flicker_light(colour, duration, shortest_flicker, longest_flicker):
         light_off(colour)
         flicker_time = random.uniform(shortest_flicker, longest_flicker)
         time.sleep(flicker_time)
+
+
+def p_light(colour, duration, flicker_time, flickers):
+    '''
+    This takes a list of percentage positions and flickers the light at each one,
+    a list of [10,50,90] with a duration of ten seconds would flash the lights
+    after one second, five seconds and nine seconds.
+    '''
+    time_now = time.time()
+    duration_percent = float(duration) / 100
+    prior = 0.0
+    for x in flickers:
+        off_wait = (float(x) - prior) * (duration_percent)
+        prior = x
+        time.sleep(off_wait)
+        #print("----f----", x, " :", off_wait, " : ", time.time() - time_now)
+        light_on(colour)
+        time.sleep(flicker_time)
+        light_off(colour)
 
 def red_light(mode, duration):
     light_trigger("red", mode, duration)
@@ -83,24 +109,28 @@ def wait_light(mode, duration):
 
 def light_trigger(lamp, mode, duration):
     if mode == "on":
-        print(lamp + " LIGHT ON")
+        #print(lamp + " LIGHT ON")
         light_on(lamp)
         time.sleep(duration)
     if mode == "off":
-        print(lamp + " LIGHT off")
+        #print(lamp + " LIGHT off")
         light_off(lamp)
         time.sleep(duration)
     if mode == "flicker":
         shortest_flicker = 0.1
         longest_flicker = 1
         flicker_light(lamp, duration, shortest_flicker, longest_flicker)
+    if mode == "percent":
+        flicker_time = 0.1
+        flickers = [5, 10, 25, 50, 75, 90, 95]
+        p_light(lamp, duration, flicker_time, flickers)
 
-red_cycle = [["on", 2], ["off", 2], ["flicker", 5], ["off", 2]]
-amber_cycle = [["on", 10], ["off", 10]]
-green_cycle = [["on", 20], ["off", 20]]
-walk_cycle = [["on", 2], ["off", 2]]
-dontwalk_cycle = [["on", 3], ["off", 2]]
-wait_cycle = [["on", 2], ["off", 1]]
+red_cycle = [["on", 0.1], ["off", 0.1], ["percent", 5], ["off", 2]]
+amber_cycle = [["on", 10], ["flicker", 10]]
+green_cycle = [["flicker", 3], ["off", 6], ["on", 3]]
+walk_cycle = [["off", 5], ["on", 5]]
+dontwalk_cycle = [["on", 5], ["off", 5]]
+wait_cycle = [["on", 3], ["off", 4]]
 
 
 # light pattern loop
