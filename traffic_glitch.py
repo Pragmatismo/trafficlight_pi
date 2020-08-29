@@ -83,7 +83,7 @@ def p_light(colour, duration, flicker_time, flickers):
     for x in flickers:
         off_wait = (float(x) - prior) * (duration_percent)
         prior = x
-        time.sleep(off_wait)
+        time.sleep(off_wait - flicker_time)
         #print("----f----", x, " :", off_wait, " : ", time.time() - time_now)
         light_on(colour)
         time.sleep(flicker_time)
@@ -125,7 +125,7 @@ def light_trigger(lamp, mode, duration):
         flickers = [5, 10, 25, 50, 75, 90, 95]
         p_light(lamp, duration, flicker_time, flickers)
 
-red_cycle = [["on", 0.1], ["off", 0.1], ["percent", 5], ["off", 2]]
+red_cycle = [["on", 0.5], ["off", 0.1], ["percent", 5], ["off", 2]]
 amber_cycle = [["on", 10], ["flicker", 10]]
 green_cycle = [["flicker", 3], ["off", 6], ["on", 3]]
 walk_cycle = [["off", 5], ["on", 5]]
