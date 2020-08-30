@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import time
-import random
 import RPi.GPIO as GPIO
 
 # Pin Numbers
@@ -63,20 +62,19 @@ if __name__ == '__main__':
     light_on("green")
     light_on("walk")
     # loop
-    while False:
+    while True:
         print("")
         time.sleep(15)
-        light_off("green", 15, 0.001, 1)
+        light_off("green")
         light_off("walk")
         light_on("amber")
         light_on("dontwalk")
         light_on("wait")
         time.sleep(15)
         light_off("amber")
-        light_on("red", 15, 0.01, 2)
+        light_on("red")
         time.sleep(15)
         light_on("amber")
-        light_off("red", 15, 0.1, 0.5)
         time.sleep(15)
         light_off("red")
         light_off("amber")
