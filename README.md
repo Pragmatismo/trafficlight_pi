@@ -1,8 +1,11 @@
 # trafficlight_pi
 
-Simple control for relay controlled traffic lights. 
+Simple control for relay controlled traffic lights, and glitched traffic lights.
+
 
 # GPIO Numbers 
+
+Can control relays, motors, LEDs, or anything that uses a digital on-off signal from the GPIO
 
 Green = 7
 Amber = 8
@@ -16,4 +19,8 @@ wait = 18
 To start on boot add this line to cron
 
 @reboot /home/pi/trafficlight_pi/traffic_loop.py
+
+or
+
+@reboot /home/pi/trafficlight_pi/traffic_glitch.py
 
