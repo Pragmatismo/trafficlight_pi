@@ -2,63 +2,63 @@
 import time
 import random
 import threading
-# import RPi.GPIO as GPIO
-#
-# # Pin Numbers
-# gpio_green = 7
-# gpio_amber = 8
-# gpio_red   = 25
-# gpio_walk  = 24
-# gpio_dontwalk = 23
-# gpio_wait = 18
-#
-# initial board setup
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setwarnings(False)
-# GPIO.setup(gpio_green, GPIO.OUT)
-# GPIO.setup(gpio_amber, GPIO.OUT)
-# GPIO.setup(gpio_red, GPIO.OUT)
-# GPIO.setup(gpio_walk, GPIO.OUT)
-# GPIO.setup(gpio_dontwalk, GPIO.OUT)
-# GPIO.setup(gpio_wait, GPIO.OUT)
-#
-# # lamp control functions
-# def light_on(colour):
-#     print("  + Turning on " + colour)
-#     if colour == "green":
-#         GPIO.output(gpio_green, GPIO.LOW)
-#     elif colour == "amber":
-#         GPIO.output(gpio_amber, GPIO.LOW)
-#     elif colour == "red":
-#         GPIO.output(gpio_red, GPIO.LOW)
-#     elif colour == "walk":
-#         GPIO.output(gpio_walk, GPIO.LOW)
-#     elif colour == "dontwalk":
-#         GPIO.output(gpio_dontwalk, GPIO.LOW)
-#     elif colour == "wait":
-#         GPIO.output(gpio_wait, GPIO.LOW)
-#
-# def light_off(colour):
-#     print("  - Turning off " + colour)
-#     if colour == "green":
-#         GPIO.output(gpio_green, GPIO.HIGH)
-#     elif colour == "amber":
-#         GPIO.output(gpio_amber, GPIO.HIGH)
-#     elif colour == "red":
-#         GPIO.output(gpio_red, GPIO.HIGH)
-#     elif colour == "walk":
-#         GPIO.output(gpio_walk, GPIO.HIGH)
-#     elif colour == "dontwalk":
-#         GPIO.output(gpio_dontwalk, GPIO.HIGH)
-#     elif colour == "wait":
-#         GPIO.output(gpio_wait, GPIO.HIGH)
-#
-#testing
+import RPi.GPIO as GPIO
+
+# Pin Numbers
+gpio_green = 7
+gpio_amber = 8
+gpio_red   = 25
+gpio_walk  = 24
+gpio_dontwalk = 23
+gpio_wait = 18
+
+initial board setup
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(gpio_green, GPIO.OUT)
+GPIO.setup(gpio_amber, GPIO.OUT)
+GPIO.setup(gpio_red, GPIO.OUT)
+GPIO.setup(gpio_walk, GPIO.OUT)
+GPIO.setup(gpio_dontwalk, GPIO.OUT)
+GPIO.setup(gpio_wait, GPIO.OUT)
+
+# lamp control functions
 def light_on(colour):
-    print(" ON - " + colour)
+    print("  + Turning on " + colour)
+    if colour == "green":
+        GPIO.output(gpio_green, GPIO.LOW)
+    elif colour == "amber":
+        GPIO.output(gpio_amber, GPIO.LOW)
+    elif colour == "red":
+        GPIO.output(gpio_red, GPIO.LOW)
+    elif colour == "walk":
+        GPIO.output(gpio_walk, GPIO.LOW)
+    elif colour == "dontwalk":
+        GPIO.output(gpio_dontwalk, GPIO.LOW)
+    elif colour == "wait":
+        GPIO.output(gpio_wait, GPIO.LOW)
 
 def light_off(colour):
-    print(" OFF - " + colour)
+    print("  - Turning off " + colour)
+    if colour == "green":
+        GPIO.output(gpio_green, GPIO.HIGH)
+    elif colour == "amber":
+        GPIO.output(gpio_amber, GPIO.HIGH)
+    elif colour == "red":
+        GPIO.output(gpio_red, GPIO.HIGH)
+    elif colour == "walk":
+        GPIO.output(gpio_walk, GPIO.HIGH)
+    elif colour == "dontwalk":
+        GPIO.output(gpio_dontwalk, GPIO.HIGH)
+    elif colour == "wait":
+        GPIO.output(gpio_wait, GPIO.HIGH)
+
+#testing
+# def light_on(colour):
+#     print(" ON - " + colour)
+#
+# def light_off(colour):
+#     print(" OFF - " + colour)
 
 def flicker_light(colour, duration, shortest_flicker, longest_flicker):
     time_now = time.time()
