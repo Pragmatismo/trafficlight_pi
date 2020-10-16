@@ -2,7 +2,7 @@
 import time
 import random
 import threading
-testing = True
+testing = False # set to true to show command line output rather than use the GPIO
 if not testing == True:
     import RPi.GPIO as GPIO
 
