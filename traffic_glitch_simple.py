@@ -4,7 +4,7 @@ import time
 import datetime
 import random
 import threading
-mode = "pwm" # set to true to show command line output rather than use the GPIO
+mode = "true" # set to true to show command line output rather than use the GPIO
 if mode == "gpio":
     import RPi.GPIO as GPIO
 
@@ -141,7 +141,7 @@ def light_off(colour):
 # patterns
 def flicker_light(colour, duration, shortest_flicker, longest_flicker):
     time_now = time.time()
-    while time.time() < time_now + duration:
+    while time.time() < time_now + float(duration):
         flicker_time = random.uniform(shortest_flicker, longest_flicker)
         light_on(colour)
         time.sleep(flicker_time)
