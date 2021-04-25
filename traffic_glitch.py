@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 import sys
 import time
+import datetime
 import random
 import threading
-testing = False # set to true to show command line output rather than use the GPIO
-if not testing == True:
+mode = "pwm" # set to true to show command line output rather than use the GPIO
+if mode == "gpio":
     import RPi.GPIO as GPIO
 
     # Pin Numbers
@@ -24,6 +25,18 @@ if not testing == True:
     GPIO.setup(gpio_walk, GPIO.OUT)
     GPIO.setup(gpio_dontwalk, GPIO.OUT)
     GPIO.setup(gpio_wait, GPIO.OUT)
+elif mode == "pwm":
+    from board import SCL, SDA
+    import busio
+     # Import the PCA9685 module.
+    from adafruit_pca9685 import PCA9685
+    # Create the I2C bus interface.
+    i2c_bus = busio.I2C(SCL, SDA)
+    # Create a simple PCA9685 class instance.
+    pca = PCA9685(i2c_bus)
+    # Set the PWM frequency to 60hz.
+    pca.frequency = 60
+
 
 # load from file
 def load_from_file(load_location, key_to_use):
@@ -79,7 +92,7 @@ def load_lamp_conf(conf_file):
             if action[0] == "file":
                 filename = action[1].split(":")[0]
                 keys = action[1].split(":")[1]
-                print("Loading keys - " + keys + " from " + filename)
+                #print("Loading keys - " + keys + " from " + filename)
                 file_timings = load_from_file(filename, keys)
                 action = ["file", file_timings]
             lamp_action_list.append(action)
@@ -101,39 +114,44 @@ def text_light(colour, duration, timing_list):
             light_off(colour)
             time.sleep(flicker_time)
 
+pwm_channels = {"green":1, "amber":2, "red":0, "walk_light":4, "dont_walk":3, "wait_light":5}
 
 # lamp control functions
 def light_on(colour):
-    if not testing == True:
+    if mode == "gpio":
         if colour == "green":
             GPIO.output(gpio_green, GPIO.LOW)
         elif colour == "amber":
             GPIO.output(gpio_amber, GPIO.LOW)
         elif colour == "red":
             GPIO.output(gpio_red, GPIO.LOW)
-        elif colour == "walk":
+        elif colour == "walk_light":
             GPIO.output(gpio_walk, GPIO.LOW)
-        elif colour == "dontwalk":
+        elif colour == "dont_walk":
             GPIO.output(gpio_dontwalk, GPIO.LOW)
-        elif colour == "wait":
+        elif colour == "wait_light":
             GPIO.output(gpio_wait, GPIO.LOW)
+    elif mode == "pwm":
+        pca.channels[pwm_channels[colour]].duty_cycle = 0xffff
     else:
         print("  + Turning on " + colour)
 
 def light_off(colour):
-    if not testing == True:
+    if mode == 'gpio':
         if colour == "green":
             GPIO.output(gpio_green, GPIO.HIGH)
         elif colour == "amber":
             GPIO.output(gpio_amber, GPIO.HIGH)
         elif colour == "red":
             GPIO.output(gpio_red, GPIO.HIGH)
-        elif colour == "walk":
+        elif colour == "walk_light":
             GPIO.output(gpio_walk, GPIO.HIGH)
-        elif colour == "dontwalk":
+        elif colour == "dont_walk":
             GPIO.output(gpio_dontwalk, GPIO.HIGH)
-        elif colour == "wait":
+        elif colour == "wait_light":
             GPIO.output(gpio_wait, GPIO.HIGH)
+    elif mode == "pwm":
+        pca.channels[pwm_channels[colour]].duty_cycle = 0
     else:
         print("  - Turning off " + colour)
 
@@ -179,13 +197,13 @@ def green_light(mode, duration):
     light_trigger("green", mode, duration)
 
 def walk_light(mode, duration):
-    light_trigger("walk", mode, duration)
+    light_trigger("walk_light", mode, duration)
 
 def dontwalk_light(mode, duration):
-    light_trigger("dontwalk", mode, duration)
+    light_trigger("dont_walk", mode, duration)
 
 def wait_light(mode, duration):
-    light_trigger("wait", mode, duration)
+    light_trigger("wait_light", mode, duration)
 
 def light_trigger(lamp, mode, duration):
     if mode == "on":
@@ -207,7 +225,7 @@ def light_trigger(lamp, mode, duration):
     if mode == "file":
         timing_lists = duration
         list_choice = random.randint(0, len(timing_lists)-1)
-        print(len(timing_lists), " lists, using ", list_choice)
+        #print(len(timing_lists), " lists, using ", list_choice)
         text_light(lamp, "0", timing_lists[list_choice])
 
 
@@ -219,8 +237,8 @@ def light_trigger(lamp, mode, duration):
 #amber_cycle = [["on", 5], ["off", 5]]
 #green_cycle = [["off", 5], ["on", 5]]
 #walk_cycle = [["off", 5], ["on", 5]]
-dontwalk_cycle = [["on", 5], ["off", 5]]
-wait_cycle = [["on", 3], ["off", 5]]
+#dontwalk_cycle = [["on", 5], ["off", 5]]
+#wait_cycle = [["on", 3], ["off", 5]]
 
 
 # light pattern loop
@@ -240,6 +258,7 @@ if __name__ == '__main__':
         red_cycle = lamp_dict['red']
         red_thread = threading.Thread(target=red_light, args=("on",5,))#, daemon=True)
         red_thread.start()
+        red_start = datetime.datetime.now()
     if "amber" in lights_to_use:
         amber_cycle = lamp_dict['amber']
         amber_thread = threading.Thread(target=amber_light, args=("on",2,))#, daemon=True)
@@ -249,13 +268,15 @@ if __name__ == '__main__':
         green_thread = threading.Thread(target=green_light, args=(green_cycle[g_cycle][0],green_cycle[g_cycle][1]))
         green_thread.start()
     if "walk_light" in lights_to_use:
-        walk_cycle = lamp_dict['walk']
+        walk_cycle = lamp_dict['walk_light']
         walk_thread = threading.Thread(target=walk_light, args=(walk_cycle[g_cycle][0],walk_cycle[g_cycle][1]))
         walk_thread.start()
     if "dont_walk" in lights_to_use:
+        dontwalk_cycle = lamp_dict['dont_walk']
         dontwalk_thread = threading.Thread(target=dontwalk_light, args=(dontwalk_cycle[dw_cycle][0],dontwalk_cycle[dw_cycle][1]))
         dontwalk_thread.start()
     if "wait_light" in lights_to_use:
+        wait_cycle = lamp_dict['wait_light']
         wait_thread = threading.Thread(target=wait_light, args=(wait_cycle[wt_cycle][0],wait_cycle[wt_cycle][1]))
         wait_thread.start()
     # Start the loop
@@ -263,6 +284,9 @@ if __name__ == '__main__':
         # Red Thread
         if "red" in lights_to_use:
             if not red_thread.is_alive():
+                time_since_start = datetime.datetime.now() - red_start
+                print(time_since_start)
+                time_since_start = datetime.datetime.now()
                 r_cycle = r_cycle + 1
                 if r_cycle > len(red_cycle)-1:
                     r_cycle = 0
