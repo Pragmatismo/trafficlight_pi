@@ -101,6 +101,8 @@ def text_light(colour, duration, timing_list):
     for x in timing_list:
         direction = x[0]
         flicker_time = float(x[1])
+        if flicker_time < 0:
+            flicker_time = 0
         #print(direction + " " + str(flicker_time))
         if direction == "D":
             light_on(colour)
