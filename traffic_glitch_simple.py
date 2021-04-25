@@ -144,9 +144,13 @@ def flicker_light(colour, duration, shortest_flicker, longest_flicker):
     while time.time() < time_now + float(duration):
         flicker_time = random.uniform(shortest_flicker, longest_flicker)
         light_on(colour)
+        if flicker_time < 0:
+            flicker_time = 0
         time.sleep(flicker_time)
         light_off(colour)
         flicker_time = random.uniform(shortest_flicker, longest_flicker)
+        if flicker_time < 0:
+            flicker_time = 0
         time.sleep(flicker_time)
 
 def p_light(colour, duration, flicker_time, flickers):
