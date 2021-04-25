@@ -1,7 +1,7 @@
 test>A>U=1.0,D=0.01,U=1
 test>B>U=2.0,D=0.01,U=1
 test>C>U=3.0,D=0.01,U=1
-test>U>U=4.0,D=0.01,U=1
+test>D>U=4.0,D=0.01,U=1
 test>E>U=5.0,D=0.01,U=1
 test>F>U=6.0,D=0.01,U=1
 test>U>U=7.0,D=0.01,U=1
