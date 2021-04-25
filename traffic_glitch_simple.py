@@ -4,7 +4,7 @@ import time
 import datetime
 import random
 import threading
-mode = "true" # set to true to show command line output rather than use the GPIO
+mode = "pwm" # set to true to show command line output rather than use the GPIO
 if mode == "gpio":
     import RPi.GPIO as GPIO
 
