@@ -1,9 +1,12 @@
 #!/usr/bin/python3
+import os
 import sys
 import time
 import datetime
 import random
 import threading
+homedir = os.getenv("HOME")
+os.chdir(homedir + /trafficlight_pi/)
 mode = "pwm" # set to true to show command line output rather than use the GPIO
 if mode == "gpio":
     import RPi.GPIO as GPIO
